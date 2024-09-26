@@ -15,7 +15,6 @@ const Popup = ({ closePopup }) => {
     { label: "State", value: "state", type: "" },
   ]);
 
-  // Handle schema addition
   const addSchema = (schema) => {
     if (schema && !selectedSchemas.some((s) => s.value === schema.value)) {
       setSelectedSchemas([...selectedSchemas, schema]);
@@ -26,7 +25,6 @@ const Popup = ({ closePopup }) => {
     }
   };
 
-  // Handle schema removal
   const removeSchema = (schema) => {
     setSelectedSchemas(selectedSchemas.filter((s) => s.value !== schema.value));
     setAvailableSchemas([...availableSchemas, schema]);
@@ -35,12 +33,10 @@ const Popup = ({ closePopup }) => {
     setSchemaValues(newSchemaValues);
   };
 
-  // Handle schema value input change
   const handleSchemaInputChange = (value, schemaKey) => {
     setSchemaValues({ ...schemaValues, [schemaKey]: value });
   };
 
-  // Save handler
   const handleSave = () => {
     const data = {
       segment_name: segmentName,
@@ -58,7 +54,7 @@ const Popup = ({ closePopup }) => {
       body: JSON.stringify(data),
     })
       .then(() => {
-        console.log("Success: Segment saved");
+        // console.log("Success: Segment saved");
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -69,94 +65,100 @@ const Popup = ({ closePopup }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-md w-full max-w-lg">
-        <h2 className="text-2xl font-semibold mb-4">Saving Segment</h2>
-
-        {/* Segment Name Input */}
-        <input
-          type="text"
-          value={segmentName}
-          onChange={(e) => setSegmentName(e.target.value)}
-          placeholder="Name of the segment"
-          className="border p-2 mb-4 w-full"
-        />
-
-        <p className="text-sm mb-4">
-          To save your segment, you need to add the schemas to build the query:
-        </p>
-
-        {/* Display dynamically added schema inputs */}
-        {selectedSchemas.length > 0 && (
-          <div className="space-y-2 mb-4">
-            {selectedSchemas.map((schema, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between bg-blue-100 p-2 rounded mb-2"
-              >
-                <div className="flex items-center space-x-2">
-                  <span
-                    className={`w-2 h-2 rounded-full ${
-                      schema.type === "User Traits"
-                        ? "bg-green-500"
-                        : "bg-pink-500"
-                    }`}
-                  ></span>
-                  <span>{schema.label}</span>
-                </div>
-
-                {/* Input for schema value */}
-                <input
-                  type="text"
-                  value={schemaValues[schema.value] || ""}
-                  onChange={(e) =>
-                    handleSchemaInputChange(e.target.value, schema.value)
-                  }
-                  placeholder={`Enter ${schema.label}`}
-                  className="border p-1 rounded"
-                />
-
-                {/* Remove schema button */}
-                <button
-                  onClick={() => removeSchema(schema)}
-                  className="text-red-500 ml-2"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            ))}
+      <div className="bg-white rounded-md w-full max-w-lg h-full sm:h-[500px] md:h-[600px] lg:h-[700px] flex flex-col justify-between">
+        <div>
+          <div className="h-[76px]">
+            <h2 className="text-lg sm:text-xl md:text-2xl p-4 font-semibold mb-4 h-[76px] text-white bg-[rgba(57,175,189,255)] items-center flex">
+              Saving Segment
+            </h2>
           </div>
-        )}
 
-        {/* Dropdown to Add New Schema */}
-        <Dropdown options={availableSchemas} addSchema={addSchema} />
+          <div className="p-4 sm:p-6">
+            <p className="text-black text-[12px] sm:text-[14px] mb-4">
+              Enter the Name of the Segment
+            </p>
+            <input
+              type="text"
+              value={segmentName}
+              onChange={(e) => setSegmentName(e.target.value)}
+              placeholder="Name of the segment"
+              className="border border-[rgba(202,202,202,255)] placeholder:text-[12px] sm:placeholder:text-[14px] p-2 mb-4 w-full"
+            />
 
-        {/* Save/Cancel Buttons */}
-        <div className="flex justify-between mt-6">
-          <button
-            onClick={handleSave}
-            className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
-          >
-            Save the Segment
-          </button>
-          <button
-            onClick={closePopup}
-            className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
-          >
-            Cancel
-          </button>
+            <p className="text-xs sm:text-sm mb-4 font-medium">
+              To save your segment, you need to add the schemas to build the
+              query:
+            </p>
+
+            {selectedSchemas.length > 0 && (
+              <div className="space-y-2 mb-4">
+                {selectedSchemas.map((schema, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-2 rounded mb-2"
+                  >
+                    <div className="flex items-center space-x-2 mb-2 sm:mb-0">
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          schema.type === "User Traits"
+                            ? "bg-green-500"
+                            : "bg-pink-500"
+                        }`}
+                      ></span>
+                      <span>{schema.label}</span>
+                    </div>
+
+                    <input
+                      type="text"
+                      value={schemaValues[schema.value] || ""}
+                      onChange={(e) =>
+                        handleSchemaInputChange(e.target.value, schema.value)
+                      }
+                      placeholder={`Enter ${schema.label}`}
+                      className="border p-1 rounded w-full sm:w-auto mb-2 sm:mb-0"
+                    />
+
+                    <button
+                      onClick={() => removeSchema(schema)}
+                      className="text-red-500 ml-0 sm:ml-2"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.25 12a.75.75 0 0 1 .75-.75h14a.75.75 0 0 1 0 1.5H5a.75.75 0 0 1-.75-.75Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <Dropdown options={availableSchemas} addSchema={addSchema} />
+          </div>
+        </div>
+
+        <div>
+          <div className="flex justify-start space-x-3 bg-[rgba(246,246,246,255)] h-[80px] items-center p-4">
+            <button
+              onClick={handleSave}
+              className="bg-[#41b392] text-white py-2 px-4 rounded-md"
+            >
+              Save the Segment
+            </button>
+            <button
+              onClick={closePopup}
+              className="bg-white text-black py-2 px-4 rounded-md"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </div>
