@@ -15,10 +15,12 @@ const Popup = ({ closePopup }) => {
   ]);
 
   const addSchema = (schema) => {
-    setSelectedSchemas([...selectedSchemas, schema]);
-    setAvailableSchemas(
-      availableSchemas.filter((item) => item.value !== schema.value)
-    );
+    if (schema && !selectedSchemas.includes(schema)) {
+      setSelectedSchemas([...selectedSchemas, schema]);
+      setAvailableSchemas(
+        availableSchemas.filter((item) => item.value !== schema.value)
+      );
+    }
   };
 
   const handleSave = () => {
@@ -36,7 +38,14 @@ const Popup = ({ closePopup }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    });
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
 
     closePopup();
   };
