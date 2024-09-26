@@ -23,14 +23,17 @@ Install the dependencies:
 npm install
 
 Start the development server:
-npm start
+yarn start
 The application will be available at http://localhost:3000.
 
-Popup Form Functionality
+Popup Form Functionality:
 Save Segment: Click this button to open the popup form.
 Text Box: Enter the segment name.
 Dropdown: Choose from the available schema options.
 +Add New Schema: Add multiple schema options. The dropdown refreshes with unselected options.
 Submit: Clicking the "Save segment" button will send the selected segment and schema to the webhook.
-Sending Data to Server
+
+NOTE: FIrst click on dropdown then select the value which you want (Eg: First Name) after that only click on the +Add New schema button so that it will add the new json schema in the UI.
+
+Sending Data to Server:
 The data will be sent to a webhook URL using webhook.site. You can replace the webhook URL in the code to test your own endpoint.
